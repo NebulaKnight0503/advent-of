@@ -117,9 +117,24 @@ const isSafeAfterDampening = (levelNumbers: number[], dampened: boolean = false)
   return true
 }
 
+const canBeSafeAfterDampeningBruteForce = (levelNumbers: number[]) => {
+  for (let i = 0; i < levelNumbers.length; i++) {
+    const dampenedReport = [
+      ...levelNumbers.slice(0, i),
+      ...levelNumbers.slice(i + 1)
+    ]
+    if (isSafeReport(dampenedReport)) {
+      return true
+    }
+  }
+
+  return false
+}
+
 // Assess each group of numbers
 let safeReports = 0
 let safeReportsAfterDampening = 0
+let safeReportsAfterBruteDampening = 0
 for await (const [...levels] of reportReader) {
   const levelNumbers = levels.map(l => Number.parseInt(l, 10))
 
@@ -133,9 +148,15 @@ for await (const [...levels] of reportReader) {
   if (safeAfterDampening) {
     safeReportsAfterDampening += 1
   }
+
+  const safeAfterBruteDampening = canBeSafeAfterDampeningBruteForce(levelNumbers)
+  if (safeAfterBruteDampening) {
+    safeReportsAfterBruteDampening += 1
+  }
 }
 
 console.log('\n')
 //console.log('Values: ' + JSON.stringify(values))
 console.log('[pt1] Safe reports: ' + safeReports)
 console.log('[pt2] Safe reports after dampening: ' + safeReportsAfterDampening)
+console.log('[pt2-2] Safe reports after brute dampening: ' + safeReportsAfterBruteDampening)
