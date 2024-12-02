@@ -43,16 +43,16 @@ const isSafeAfterDampening = (levelNumbers: number[], dampened: boolean = false)
   const prefix = dampened ? '  ' : ''
 
   if (dampened) {
-    console.debug(`${prefix} - Dampened levels: ${JSON.stringify(levelNumbers)}`)
+    //console.debug(`${prefix} - Dampened levels: ${JSON.stringify(levelNumbers)}`)
   }
 
   const initiallyEqual = levelNumbers[0] === levelNumbers[1]
   if (initiallyEqual) {
     if (dampened) {
-      console.debug(`${prefix}   - Skipping dampened report with no initial direction (${levelNumbers[0]} == ${levelNumbers[1]})`)
+      //console.debug(`${prefix}   - Skipping dampened report with no initial direction (${levelNumbers[0]} == ${levelNumbers[1]})`)
       return false
     } else {
-      console.debug(`${prefix} - Dampening report with no initial direction (${levelNumbers[0]} == ${levelNumbers[1]})`)
+      //console.debug(`${prefix} - Dampening report with no initial direction (${levelNumbers[0]} == ${levelNumbers[1]})`)
       return isSafeAfterDampening(levelNumbers.slice(1), true)
     }
   }
@@ -63,10 +63,10 @@ const isSafeAfterDampening = (levelNumbers: number[], dampened: boolean = false)
   for (let i = 1; i < levelNumbers.length; i++) {
     if (initiallyAscending && levelNumbers[i - 1] >= levelNumbers[i]) {
       if (dampened) {
-        console.debug(`${prefix}   - Skipping dampened report ascending levels not ascending anymore (${levelNumbers[i - 1]} >= ${levelNumbers[i]})`)
+        //console.debug(`${prefix}   - Skipping dampened report ascending levels not ascending anymore (${levelNumbers[i - 1]} >= ${levelNumbers[i]})`)
         return false
       } else {
-        console.debug(`${prefix} - Dampening report ascending levels not ascending anymore (${levelNumbers[i - 1]} >= ${levelNumbers[i]})`)
+        //console.debug(`${prefix} - Dampening report ascending levels not ascending anymore (${levelNumbers[i - 1]} >= ${levelNumbers[i]})`)
 
         const safeWithoutPrevious = isSafeAfterDampening([...levelNumbers.slice(0, i - 1), ...levelNumbers.slice(i)], true)
         if (safeWithoutPrevious) {
@@ -80,10 +80,10 @@ const isSafeAfterDampening = (levelNumbers: number[], dampened: boolean = false)
 
     if (initiallyDescending && (levelNumbers[i - 1] <= levelNumbers[i])) {
       if (dampened) {
-        console.debug(`${prefix}   - Skipping dampened report descending levels not descending anymore (${levelNumbers[i - 1]} <= ${levelNumbers[i]})`)
+        //console.debug(`${prefix}   - Skipping dampened report descending levels not descending anymore (${levelNumbers[i - 1]} <= ${levelNumbers[i]})`)
         return false
       } else {
-        console.debug(`${prefix} - Dampening report descending levels not descending anymore (${levelNumbers[i - 1]} <= ${levelNumbers[i]})`)
+        //console.debug(`${prefix} - Dampening report descending levels not descending anymore (${levelNumbers[i - 1]} <= ${levelNumbers[i]})`)
 
         const safeWithoutPrevious = isSafeAfterDampening([...levelNumbers.slice(0, i - 1), ...levelNumbers.slice(i)], true)
         if (safeWithoutPrevious) {
@@ -98,10 +98,10 @@ const isSafeAfterDampening = (levelNumbers: number[], dampened: boolean = false)
     const diff = Math.abs(levelNumbers[i] - levelNumbers[i - 1])
     if (diff < 1 || diff > 3) {
       if (dampened) {
-        console.debug(`${prefix}   - Skipping dampened report as level difference is too much: ${diff} (${levelNumbers[i - 1]} -> ${levelNumbers[i]})`)
+        //console.debug(`${prefix}   - Skipping dampened report as level difference is too much: ${diff} (${levelNumbers[i - 1]} -> ${levelNumbers[i]})`)
         return false
       } else {
-        console.debug(`${prefix} - Dampening report as level difference is too much: ${diff} (${levelNumbers[i - 1]} -> ${levelNumbers[i]})`)
+        //console.debug(`${prefix} - Dampening report as level difference is too much: ${diff} (${levelNumbers[i - 1]} -> ${levelNumbers[i]})`)
 
         const safeWithoutPrevious = isSafeAfterDampening([...levelNumbers.slice(0, i - 1), ...levelNumbers.slice(i)], true)
         if (safeWithoutPrevious) {
@@ -150,8 +150,13 @@ for await (const [...levels] of reportReader) {
   }
 
   const safeAfterBruteDampening = canBeSafeAfterDampeningBruteForce(levelNumbers)
+  console.debug(' - ' + (safeAfterBruteDampening ? 'Safe (brute)' : 'UNSAFE! (brute)'))
   if (safeAfterBruteDampening) {
     safeReportsAfterBruteDampening += 1
+  }
+
+  if (safeAfterDampening !== safeAfterBruteDampening) {
+    console.error(' - Dampening mismatch!')
   }
 }
 
