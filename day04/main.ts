@@ -22,7 +22,7 @@ for (let i = 0; i < wordMap.length; i++) {
   for (let j = 0; j < row.length; j++) {
     const char = row[j]
 
-    // Only branch out when encountering an "X"
+    // Part 1: Only branch out when encountering an "X"
     if (char === 'X') {
       // Look for "XMAS" to the right
       if (
@@ -89,7 +89,7 @@ for (let i = 0; i < wordMap.length; i++) {
       }
     }
 
-    // Only branch out when encountering an "A"
+    // Part 2: Only branch out when encountering an "A"
     if (char === 'A') {
       // Quick bail outs for peripheral lines
       if (i === 0 || i === (wordMap.length - 1) || j === 0 || j === (row.length - 1)) {
