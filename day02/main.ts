@@ -1,8 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read
 
 import { getInputRowStream } from '../helpers/file.ts'
-import { sortAscending } from '../helpers/array.ts'
-import { _ } from '../helpers/lodash.ts'
 import { getInputFileName } from '../helpers/args.ts'
 
 // Get a readable stream from the input file doesn't have to be fully loaded into memory

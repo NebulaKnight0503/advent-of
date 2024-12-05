@@ -1,7 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read
 
 import { getInputText } from '../helpers/file.ts'
-import { _ } from '../helpers/lodash.ts'
 import { getInputFileName } from '../helpers/args.ts'
 
 // Get all contents from the input file
