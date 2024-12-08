@@ -15,11 +15,11 @@ type Track = {
 const rowReader = await getInputRowStream(getInputFileName(), {  delimiter: '' })
 
 let guardPos:any = null
-const labMap1:string[][] = []
+const labMap:string[][] = []
 const labMapTrack2:Track[][] = []
 let rowNum = 0
 for await (const row of rowReader) {
-  labMap1.push(row)
+  labMap.push(row)
   labMapTrack2.push(row.map(_ => ({
     up: false,
     right: false,
@@ -42,8 +42,8 @@ for await (const row of rowReader) {
 let answerPt1 = 0
 let answerPt2 = 0
 
-const maxRow = labMap1.length - 1
-const maxCol = labMap1[0].length - 1
+const maxRow = labMap.length - 1
+const maxCol = labMap[0].length - 1
 let direction = 'up'
 
 // // Mark the starting position!!!
@@ -64,6 +64,8 @@ let direction = 'up'
 let thisChar = ''
 let nextChar = ''
 const originalGuardPos = { ...guardPos }
+
+const labMap1 = _.cloneDeep(labMap)
 
 // Part 1 only
 while (guardPos.col >= 0 && guardPos.col <= maxCol && guardPos.row >= 0 && guardPos.row <= maxRow) {
@@ -156,15 +158,24 @@ let obstaclesToAdd = 0
 
 for (let r = 0; r <= maxRow; r++) {
   for (let c = 0; c <= maxCol; c++) {
-    if (labMap1[r][c] === '#' || labMap1[r][c] === '^') {
+    if (labMap[r][c] === '#' || labMap[r][c] === '^') {
       continue
     }
 
+    // If the guard's original path from Part 1 would not have encountered this spot, no need to test it
+    if (labMap1[r][c] !== 'X') {
+      continue
+    }
+
+    // console.debug(`Analyzing added obstacle at ${r},${c}...`)
+
     // Make an ugly deep clone of the map
-    const labMap2 = _.cloneDeep(labMap1)
+    const labMap2 = _.cloneDeep(labMap)
     labMap2[r][c] = 'O'
 
     guardPos = { ...originalGuardPos }
+    direction = 'up'
+
     const moddedLabTrack2 = _.cloneDeep(labMapTrack2)
 
     while (guardPos.col >= 0 && guardPos.col <= maxCol && guardPos.row >= 0 && guardPos.row <= maxRow) {
@@ -181,7 +192,6 @@ for (let r = 0; r <= maxRow; r++) {
           break
         }
         thisTrack.up = true
-        console.log(moddedLabTrack2[guardPos.row][guardPos.col])
 
         // Stepping out of bounds
         if (guardPos.row - 1 < 0) {
@@ -277,8 +287,8 @@ for (let r = 0; r <= maxRow; r++) {
       }
     }
 
-    console.debug('Lab Map, Part 2:')
-    console.debug(labMap2.reduce((acc, row) => acc + row.join('') + '\n', ''))
+    // console.debug('Lab Map, at end of an iteration in Part 2:')
+    // console.debug(labMap2.reduce((acc, row) => acc + row.join('') + '\n', ''))
   }
 }
 
