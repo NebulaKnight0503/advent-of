@@ -18,6 +18,8 @@ const antennaMap:string[][] = []
 const antennaDict:Record<string, Point[]> = {}
 const antinodeMap1:string[][] = []
 const antinodeDict1:Record<string, boolean> = {}
+const antinodeMap2:string[][] = []
+const antinodeDict2:Record<string, boolean> = {}
 
 let rowNum = 0
 for await (const row of rowReader) {
@@ -32,6 +34,7 @@ for await (const row of rowReader) {
   }
   antennaMap.push(row)
   antinodeMap1.push(Array(row.length).fill('.'))
+  antinodeMap2.push(Array(row.length).fill('.'))
 
   rowNum++
 }
@@ -49,45 +52,53 @@ for (const [freq, points] of Object.entries(antennaDict)) {
     const thisPoint = points[i]
     const otherPoints = points.filter((_, j) => j !== i)
     for (const otherPoint of otherPoints) {
+      let isFirstAntinode = true
+      let keepGoing = true
+
+      // Start from the current point
+      let antinodeRow = thisPoint.row
+      let antinodeCol = thisPoint.col
+
+      // In part 2, the antenna itself is guaranteed to have an antinode on it
+      antinodeDict2[`${antinodeRow},${antinodeCol}`] = true
+
       const rowDiff = otherPoint.row - thisPoint.row
       const colDiff = otherPoint.col - thisPoint.col
-      const antinodeRow = thisPoint.row - rowDiff
-      const antinodeCol = thisPoint.col - colDiff
-      if (antinodeRow >= 0 && antinodeRow <= maxRow && antinodeCol >= 0 && antinodeCol <= maxCol) {
-        antinodeMap1[antinodeRow][antinodeCol] = '#'
-        antinodeDict1[`${antinodeRow},${antinodeCol}`] = true
-      }
-    }
-  }
-}
 
-for (const [freq, points] of Object.entries(antennaDict)) {
-  // If there's only one antenna of this frequency, then it doesn't have any antinodes
-  if (points.length === 1) {
-    continue
-  }
+      while (keepGoing) {
+        antinodeRow = antinodeRow - rowDiff
+        antinodeCol = antinodeCol - colDiff
 
-  for (let i = 0; i < points.length; i++) {
-    const thisPoint = points[i]
-    const otherPoints = points.filter((_, j) => j !== i)
-    for (const otherPoint of otherPoints) {
-      const rowDiff = otherPoint.row - thisPoint.row
-      const colDiff = otherPoint.col - thisPoint.col
-      const antinodeRow = thisPoint.row - rowDiff
-      const antinodeCol = thisPoint.col - colDiff
-      if (antinodeRow >= 0 && antinodeRow <= maxRow && antinodeCol >= 0 && antinodeCol <= maxCol) {
-        antinodeMap1[antinodeRow][antinodeCol] = '#'
-        antinodeDict1[`${antinodeRow},${antinodeCol}`] = true
+        console.debug(`Checking for anticode at ${antinodeRow},${antinodeCol}...`)
+
+        if (antinodeRow >= 0 && antinodeRow <= maxRow && antinodeCol >= 0 && antinodeCol <= maxCol) {
+          console.debug(`...found antinode at ${antinodeRow},${antinodeCol}`)
+          if (isFirstAntinode) {
+            antinodeMap1[antinodeRow][antinodeCol] = '#'
+            antinodeDict1[`${antinodeRow},${antinodeCol}`] = true
+            isFirstAntinode = false
+          }
+
+          // Resonant harmonics (part 2)
+          antinodeMap2[antinodeRow][antinodeCol] = '#'
+          antinodeDict2[`${antinodeRow},${antinodeCol}`] = true
+        } else {
+          console.debug(`Proposed antinode at ${antinodeRow},${antinodeCol} was out of bounds`)
+          keepGoing = false
+        }
+        //keepGoing = false
       }
     }
   }
 }
 
 answerPt1 = Object.keys(antinodeDict1).length
+answerPt2 = Object.keys(antinodeDict2).length
 
 // DEBUGGING
 // console.debug(`Antenna map:\n${antennaMap.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
-// console.debug(`Antinode map:\n${antinodeMap1.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
+// console.debug(`Antinode map 1:\n${antinodeMap1.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
+// console.debug(`Antinode map 2:\n${antinodeMap2.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
 // console.debug(`Antenna dict:\n${JSON.stringify(antennaDict, null, 2)}\n`)
 
 console.log('\n')
