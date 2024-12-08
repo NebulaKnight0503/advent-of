@@ -2,6 +2,7 @@
 
 import { getInputRowStream } from '../helpers/file.ts'
 import { getInputFileName } from '../helpers/args.ts'
+import { printGrid } from '../helpers/print.ts'
 import { _ } from '../helpers/lodash.ts'
 
 type Track = {
@@ -288,17 +289,17 @@ for (let r = 0; r <= maxRow; r++) {
     }
 
     // console.debug('Lab Map, at end of an iteration in Part 2:')
-    // console.debug(labMap2.reduce((acc, row) => acc + row.join('') + '\n', ''))
+    // console.debug(printGrid(labMap2))
   }
 }
 
 answerPt2 = obstaclesToAdd
 
 // console.debug('Lab Map, Part 1:')
-// console.debug(labMap1.reduce((acc, row) => acc + row.join('') + '\n', ''))
+// console.debug(printGrid(labMap1))
 
 // console.debug('Lab Map, Part 2:')
-// console.debug(labMap2.reduce((acc, row) => acc + row.join('') + '\n', ''))
+// console.debug(printGrid(labMap2))
 
 // console.debug('Guard position before leaving: ' + JSON.stringify(guardPos) + ' (' + direction + ')\n')
 

@@ -2,6 +2,7 @@
 
 import { getInputRowStream } from '../helpers/file.ts'
 import { getInputFileName } from '../helpers/args.ts'
+import { printGrid } from '../helpers/print.ts'
 
 let answerPt1 = 0
 let answerPt2 = 0
@@ -96,9 +97,9 @@ answerPt1 = Object.keys(antinodeDict1).length
 answerPt2 = Object.keys(antinodeDict2).length
 
 // DEBUGGING
-// console.debug(`Antenna map:\n${antennaMap.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
-// console.debug(`Antinode map 1:\n${antinodeMap1.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
-// console.debug(`Antinode map 2:\n${antinodeMap2.reduce((acc, row) => acc + row.join('') + '\n', '')}\n`)
+// console.debug(`Antenna map:\n${printGrid(antennaMap)}\n`)
+// console.debug(`Antinode map 1:\n${printGrid(antinodeMap1)}\n`)
+// console.debug(`Antinode map 2:\n${printGrid(antinodeMap2)}\n`)
 // console.debug(`Antenna dict:\n${JSON.stringify(antennaDict, null, 2)}\n`)
 
 console.log('\n')
