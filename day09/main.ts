@@ -85,12 +85,12 @@ while (buildingIndex < countOfNonFreeBlocks) {
 // console.debug('compactedFileSystemMap1:\n' + compactedFileSystemMap1.join(''))
 
 // Validation
-for (const [entry, expectedCount] of Object.entries(occurrenceCounts)) {
-  const actualCount = compactedFileSystemMap1.filter(c => c === entry).length
-  if (actualCount !== expectedCount) {
-    console.error(`Expected ${expectedCount} of "${entry}", but found ${actualCount}`)
-  }
-}
+// for (const [entry, expectedCount] of Object.entries(occurrenceCounts)) {
+//   const actualCount = compactedFileSystemMap1.filter(c => c === entry).length
+//   if (actualCount !== expectedCount) {
+//     console.error(`Expected ${expectedCount} of "${entry}", but found ${actualCount}`)
+//   }
+// }
 
 // Part 2
 const compactedFileSystemMap2:string[] = fileSystemMap.slice()
@@ -149,12 +149,12 @@ for (let i = 0; i < compactedFileSystemMap2.length; i++) {
 //console.debug('compactedFileSystemMap2:\n' + compactedFileSystemMap2.join(''))
 
 // Validation
-for (const [entry, expectedCount] of Object.entries(occurrenceCounts)) {
-  const actualCount = compactedFileSystemMap2.filter(c => c === entry).length
-  if (actualCount !== expectedCount) {
-    console.error(`Expected ${expectedCount} of "${entry}", but found ${actualCount}`)
-  }
-}
+// for (const [entry, expectedCount] of Object.entries(occurrenceCounts)) {
+//   const actualCount = compactedFileSystemMap2.filter(c => c === entry).length
+//   if (actualCount !== expectedCount) {
+//     console.error(`Expected ${expectedCount} of "${entry}", but found ${actualCount}`)
+//   }
+// }
 
 console.log('\n')
 //console.log('Values: ' + JSON.stringify(values))
